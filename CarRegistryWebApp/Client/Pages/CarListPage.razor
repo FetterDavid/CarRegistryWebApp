@@ -1,0 +1,46 @@
+﻿@page "/cars"
+@using Model.Models
+@using Client.Services
+@inject ICarService CarService;
+
+<PageTitle>Cars</PageTitle>
+<h3>Cars</h3>
+@if (_cars == null)
+{
+    <h2>Loading...</h2>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <td>Brand</td>
+                <td>Type</td>
+                <td>RegistrationNumber</td>
+                <td>Production Date</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Car cars in _cars)
+            {
+                <tr>
+                    <td>@cars.Brand</td>
+                    <td>@cars.Type</td>
+                    <td>@cars.RegistrationNumber</td>
+                    <td>@cars.ProductionDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private IEnumerable<Car>? _cars { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _cars = await CarService.GetAllCarAsync();
+    }
+
+}
