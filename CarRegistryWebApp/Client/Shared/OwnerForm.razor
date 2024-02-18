@@ -1,0 +1,33 @@
+﻿@using Model.Models
+@if (Owner is null || HandleValidSubmitAsync is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@Owner" OnValidSubmit="@HandleValidSubmitAsync">
+    <div>
+        <label>Last Name</label>
+            <InputText @bind-Value=Owner.LastName class="form-control" />
+    </div>
+    <div>
+        <label>First Name</label>
+            <InputText @bind-Value=Owner.FirstName class="form-control" />
+    </div>
+    <div>
+        <label>Birth Date</label>
+            <InputDate @bind-Value=Owner.BirthDate class="form-control" />
+    </div>
+</EditForm>
+}
+
+@code {
+    [Parameter]
+    public Owner? Owner { get; set; }
+
+    [Parameter]
+    public string? ButtonTitle { get; set; }
+
+    [Parameter]
+    public Func<Task>? HandleValidSubmitAsync { get; set; }
+}

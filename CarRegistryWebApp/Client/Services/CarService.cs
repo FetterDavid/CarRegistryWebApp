@@ -13,5 +13,6 @@ namespace Client.Services
         }
 
         public async Task<IEnumerable<Car>> GetAllCarAsync() => await _httpClient.GetFromJsonAsync<IEnumerable<Car>>("api/car");
+        public async Task<Car> GetCarByIdAsync(int id) => await _httpClient.GetFromJsonAsync<Car>($"api/car/{id}");
     }
 }

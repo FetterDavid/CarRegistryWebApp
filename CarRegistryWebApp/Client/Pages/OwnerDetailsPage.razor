@@ -1,0 +1,43 @@
+﻿@page "/owner/{id:int}"
+@using Model.Models
+@using Client.Services
+@inject IOwnerService OwnerService
+
+<h3>Owner Details</h3>
+@if (_owner == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+     <EditForm Model="@_owner" OnValidSubmit="@HandleValidSubmitAsync">
+        <div>
+            <label>Last Name</label>
+            <InputText @bind-Value=_owner.LastName class="form-control" disabled />
+        </div>
+        <div>
+            <label>First Name</label>
+            <InputText @bind-Value=_owner.FirstName class="form-control" disabled />
+        </div>
+        <div>
+            <label>Birth Date</label>
+            <InputDate @bind-Value=_owner.BirthDate class="form-control" disabled />
+        </div>
+    </EditForm> 
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Owner _owner { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        _owner = await OwnerService.GetOwnerByIdAsync(Id);
+    }
+
+    private async Task HandleValidSubmitAsync()
+    {
+
+    }
+}

@@ -18,16 +18,18 @@ else
                 <td>Type</td>
                 <td>RegistrationNumber</td>
                 <td>Production Date</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
-            @foreach (Car cars in _cars)
+            @foreach (Car car in _cars)
             {
                 <tr>
-                    <td>@cars.Brand</td>
-                    <td>@cars.Type</td>
-                    <td>@cars.RegistrationNumber</td>
-                    <td>@cars.ProductionDate</td>
+                    <td>@car.Brand</td>
+                    <td>@car.Type</td>
+                    <td>@car.RegistrationNumber</td>
+                    <td>@car.ProductionDate</td>
+                    <td><a href="car/@car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
                 </tr>
             }
         </tbody>

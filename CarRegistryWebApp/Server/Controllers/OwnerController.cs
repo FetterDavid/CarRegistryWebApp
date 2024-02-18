@@ -21,11 +21,20 @@ namespace Shared.Controllers
             return Ok(await _dbContext.Owners.ToListAsync());
         }
 
-        [HttpGet("{ownerId}")]
-        public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(int ownerId)
+        //[HttpGet("{cars/ownerId}")]
+        //public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(int ownerId)
+        //{
+        //    ActionResult<List<Car>> result = await _dbContext.Cars.FromSqlRaw($"GetCarsByOwnerId {ownerId}").ToListAsync();
+        //    return Ok(result);
+        //}
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Owner>> GetOwnerById(int id)
         {
-            ActionResult<List<Car>> result = await _dbContext.Cars.FromSqlRaw($"GetCarsByOwnerId {ownerId}").ToListAsync();
-            return Ok(result);
+            Owner? owner = await _dbContext.Owners.FirstOrDefaultAsync(o => o.Id == id);
+            if (owner == null) return NotFound();
+            return Ok(owner);
         }
     }
 }

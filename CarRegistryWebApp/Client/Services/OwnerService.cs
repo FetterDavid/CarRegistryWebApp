@@ -14,9 +14,6 @@ namespace Client.Services
 
         public async Task<IEnumerable<Owner>> GetAllOwnerAsync() => await _httpClient.GetFromJsonAsync<IEnumerable<Owner>>("api/owner");
 
-        public Task<Owner> GetOwnerByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<Owner> GetOwnerByIdAsync(int id) => await _httpClient.GetFromJsonAsync<Owner>($"api/owner/{id}");
     }
 }

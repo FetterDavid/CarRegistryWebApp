@@ -22,5 +22,13 @@ namespace Server.Controllers
         {
             return Ok(await _dbContext.Cars.ToListAsync());
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Car>> GetCarById(int id)
+        {
+            Car? car = await _dbContext.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            if (car == null) return NotFound();
+            return Ok(car);
+        }
     }
 }

@@ -1,0 +1,47 @@
+﻿@page "/car/{id:int}"
+@using Model.Models
+@using Client.Services
+@inject ICarService CarService
+
+<h3>Car Details</h3>
+@if (_car == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <EditForm Model="@_car" OnValidSubmit="@HandleValidSubmitAsync">
+        <div>
+            <label>Brand</label>
+            <InputText @bind-Value=_car.Brand class="form-control" disabled />
+        </div>
+        <div>
+            <label>Type</label>
+            <InputText @bind-Value=_car.Type class="form-control" disabled />
+        </div>
+        <div>
+            <label>Registration Number</label>
+            <InputText @bind-Value=_car.RegistrationNumber class="form-control" disabled />
+        </div>
+        <div>
+            <label>Production Date</label>
+            <InputDate @bind-Value=_car.ProductionDate class="form-control" disabled />
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Car _car { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        _car = await CarService.GetCarByIdAsync(Id);
+    }
+
+    private async Task HandleValidSubmitAsync()
+    {
+
+    }
+}

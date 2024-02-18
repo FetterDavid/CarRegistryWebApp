@@ -1,6 +1,6 @@
 ﻿@page "/owners"
 @using Client.Services
-@using Model.Models 
+@using Model.Models
 @inject IOwnerService OwnerService;
 
 <PageTitle>Owners</PageTitle>
@@ -17,6 +17,7 @@ else
                 <td>Last Name</td>
                 <td>First Name</td>
                 <td>Birth Date</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
@@ -26,11 +27,11 @@ else
                     <td>@owner.LastName</td>
                     <td>@owner.FirstName</td>
                     <td>@owner.BirthDate</td>
+                    <td><a href="owner/@owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
                 </tr>
             }
         </tbody>
     </table>
-
 }
 
 @code {
