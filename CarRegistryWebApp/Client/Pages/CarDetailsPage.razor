@@ -2,6 +2,7 @@
 @using Model.Models
 @using Client.Services
 @inject ICarService CarService
+@inject NavigationManager NavigationManager
 
 <h3>Car Details</h3>
 @if (_car == null)
@@ -10,7 +11,7 @@
 }
 else
 {
-    <EditForm Model="@_car" OnValidSubmit="@HandleValidSubmitAsync">
+    <EditForm Model="@_car">
         <div>
             <label>Brand</label>
             <InputText @bind-Value=_car.Brand class="form-control" disabled />
@@ -27,6 +28,14 @@ else
             <label>Production Date</label>
             <InputDate @bind-Value=_car.ProductionDate class="form-control" disabled />
         </div>
+        <div>
+            <table>
+                <tr>
+                    <td> <a href="car/edit/@_car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
+                    <td> <button @onclick="() => HandleDeleteAsync(_car.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
+                </tr>
+            </table>
+        </div>
     </EditForm>
 }
 
@@ -37,11 +46,12 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        _car = await CarService.GetCarByIdAsync(Id);
+        _car = await CarService.GetByIdAsync(Id);
     }
 
-    private async Task HandleValidSubmitAsync()
+    private async Task HandleDeleteAsync(int id)
     {
-
+        await CarService.DeleteAsync(id);
+        NavigationManager.NavigateTo($"/cars");
     }
 }

@@ -4,7 +4,10 @@ namespace Client.Services
 {
     public interface ICarService
     {
-        public Task<IEnumerable<Car>> GetAllCarAsync();
-        public Task<Car> GetCarByIdAsync(int id);
+        public Task AddAsync(Car car);
+        public Task DeleteAsync(int id);
+        public Task<IEnumerable<Car>> GetAllAsync();
+        public Task<Car> GetByIdAsync(int id);
+        public Task UpdateAsync(int id, Car car);
     }
 }

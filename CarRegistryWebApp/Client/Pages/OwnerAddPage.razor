@@ -1,0 +1,26 @@
+﻿@page "/owner/add"
+@using Model.Models
+@using Client.Services
+@using Client.Shared
+@inject IOwnerService OwnerService
+@inject NavigationManager NavigationManager
+
+<h3>Owner Details</h3>
+@if (_owner == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <OwnerForm Owner="@_owner" ButtonTitle="Add" HandleValidSubmitAsync="@HandleValidSubmitAsync" />
+}
+
+@code {
+    private Owner _owner { get; set; } = new();
+
+    private async Task HandleValidSubmitAsync()
+    {
+        await OwnerService.AddAsync(_owner);
+        NavigationManager.NavigateTo($"/owners");
+    }
+}

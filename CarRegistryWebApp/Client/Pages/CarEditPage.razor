@@ -1,0 +1,32 @@
+﻿@page "/car/edit/{id:int}"
+@using Model.Models
+@using Client.Services
+@using Client.Shared
+@inject ICarService CarService
+@inject NavigationManager NavigationManager
+
+@if (_car == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <CarForm Car="@_car" ButtonTitle="Save" HandleValidSubmitAsync="@HandleValidSubmitAsync" />
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Car _car { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        _car = await CarService.GetByIdAsync(Id);
+    }
+
+    private async Task HandleValidSubmitAsync()
+    {
+        await CarService.UpdateAsync(_car.Id, _car);
+        NavigationManager.NavigateTo($"/car/{_car.Id}");
+    }
+}

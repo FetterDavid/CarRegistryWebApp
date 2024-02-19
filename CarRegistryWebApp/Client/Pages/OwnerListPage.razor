@@ -17,7 +17,7 @@ else
                 <td>Last Name</td>
                 <td>First Name</td>
                 <td>Birth Date</td>
-                <td></td>
+                <td><a href="owner/add" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Owner</a></td>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +39,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _owners = await OwnerService.GetAllOwnerAsync();
+        _owners = await OwnerService.GetAllAsync();
     }
 }

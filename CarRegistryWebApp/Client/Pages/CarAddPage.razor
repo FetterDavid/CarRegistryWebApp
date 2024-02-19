@@ -1,0 +1,27 @@
+﻿@page "/car/add"
+@using Model.Models
+@using Client.Services
+@using Client.Shared
+@inject ICarService CarService
+@inject NavigationManager NavigationManager
+
+@if (_car == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <CarForm Car="@_car" ButtonTitle="Add" HandleValidSubmitAsync="@HandleValidSubmitAsync" />
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Car _car { get; set; } = new();
+
+    private async Task HandleValidSubmitAsync()
+    {
+        await CarService.AddAsync(_car);
+        NavigationManager.NavigateTo($"/cars");
+    }
+}

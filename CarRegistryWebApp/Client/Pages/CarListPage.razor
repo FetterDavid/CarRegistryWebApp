@@ -18,7 +18,7 @@ else
                 <td>Type</td>
                 <td>RegistrationNumber</td>
                 <td>Production Date</td>
-                <td></td>
+                <td><a href="car/add" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Car</a></td>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _cars = await CarService.GetAllCarAsync();
+        _cars = await CarService.GetAllAsync();
     }
 
 }

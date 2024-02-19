@@ -22,7 +22,7 @@ namespace Server.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CarRegistryDB;Trusted_Connection=True");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CarRegistryDB;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -31,8 +31,6 @@ namespace Server.Models
             modelBuilder.Entity<Car>(entity =>
             {
                 entity.ToTable("Car");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Brand)
                     .HasMaxLength(50)
@@ -53,17 +51,13 @@ namespace Server.Models
             {
                 entity.ToTable("CarOwnership");
 
-                entity.HasIndex(e => e.CarId, "UQ__CarOwner__68A0342FCED1CBFD")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.CarId, "UQ__CarOwner__68A0342F508DE1E4")
+                    .IsUnique();             
             });
 
             modelBuilder.Entity<Owner>(entity =>
             {
                 entity.ToTable("Owner");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.BirthDate).HasColumnType("date");
 

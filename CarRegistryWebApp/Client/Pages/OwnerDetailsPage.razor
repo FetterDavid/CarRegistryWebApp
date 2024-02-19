@@ -2,6 +2,7 @@
 @using Model.Models
 @using Client.Services
 @inject IOwnerService OwnerService
+@inject NavigationManager NavigationManager
 
 <h3>Owner Details</h3>
 @if (_owner == null)
@@ -10,7 +11,7 @@
 }
 else
 {
-     <EditForm Model="@_owner" OnValidSubmit="@HandleValidSubmitAsync">
+    <EditForm Model="@_owner">
         <div>
             <label>Last Name</label>
             <InputText @bind-Value=_owner.LastName class="form-control" disabled />
@@ -23,7 +24,15 @@ else
             <label>Birth Date</label>
             <InputDate @bind-Value=_owner.BirthDate class="form-control" disabled />
         </div>
-    </EditForm> 
+        <div>
+            <table>
+                <tr>
+                    <td> <a href="owner/edit/@_owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
+                    <td> <button @onclick="() => HandleDeleteAsync(_owner.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
+                </tr>
+            </table>
+        </div>
+    </EditForm>
 }
 
 @code {
@@ -33,11 +42,12 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        _owner = await OwnerService.GetOwnerByIdAsync(Id);
+        _owner = await OwnerService.GetByIdAsync(Id);
     }
 
-    private async Task HandleValidSubmitAsync()
+    private async Task HandleDeleteAsync(int id)
     {
-
+        await OwnerService.DeleteAsync(id);
+        NavigationManager.NavigateTo($"/owners");
     }
 }

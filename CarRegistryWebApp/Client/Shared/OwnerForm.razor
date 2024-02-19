@@ -6,19 +6,22 @@
 else
 {
     <EditForm Model="@Owner" OnValidSubmit="@HandleValidSubmitAsync">
-    <div>
-        <label>Last Name</label>
+        <div>
+            <label>Last Name</label>
             <InputText @bind-Value=Owner.LastName class="form-control" />
-    </div>
-    <div>
-        <label>First Name</label>
+        </div>
+        <div>
+            <label>First Name</label>
             <InputText @bind-Value=Owner.FirstName class="form-control" />
-    </div>
-    <div>
-        <label>Birth Date</label>
+        </div>
+        <div>
+            <label>Birth Date</label>
             <InputDate @bind-Value=Owner.BirthDate class="form-control" />
-    </div>
-</EditForm>
+        </div>
+        <div>
+            <button style="margin-top:10px" type="submit" class="btn btn-primary form-control mb-3">@ButtonTitle</button>
+        </div>
+    </EditForm>
 }
 
 @code {

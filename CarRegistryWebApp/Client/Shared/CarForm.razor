@@ -1,0 +1,40 @@
+﻿@using Model.Models
+@if (Car is null || HandleValidSubmitAsync is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@Car" OnValidSubmit="@HandleValidSubmitAsync">
+        <div>
+            <label>Brand</label>
+            <InputText @bind-Value=Car.Brand class="form-control" />
+        </div>
+        <div>
+            <label>Type</label>
+            <InputText @bind-Value=Car.Type class="form-control" />
+        </div>
+        <div>
+            <label>Registration Number</label>
+            <InputText @bind-Value=Car.RegistrationNumber class="form-control" />
+        </div>
+        <div>
+            <label>Production Date</label>
+            <InputDate @bind-Value=Car.ProductionDate class="form-control" />
+        </div>
+        <div>
+            <button style="margin-top:10px" type="submit" class="btn btn-primary form-control mb-3">@ButtonTitle</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public Car? Car { get; set; }
+
+    [Parameter]
+    public string? ButtonTitle { get; set; }
+
+    [Parameter]
+    public Func<Task>? HandleValidSubmitAsync { get; set; }
+}
