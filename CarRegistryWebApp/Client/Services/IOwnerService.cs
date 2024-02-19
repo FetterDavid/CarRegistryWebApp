@@ -1,4 +1,5 @@
-﻿using Model.Models;
+﻿using Model.DTOs;
+using Model.Models;
 
 namespace Client.Services
 {
@@ -8,6 +9,7 @@ namespace Client.Services
         public Task DeleteAsync(int id);
         public Task<IEnumerable<Owner>> GetAllAsync();
         public Task<Owner> GetByIdAsync(int id);
+        public Task<OwnerDetails> GetDetailsByIdAsync(int id);
         public Task UpdateAsync(int id, Owner owner);
 
     }

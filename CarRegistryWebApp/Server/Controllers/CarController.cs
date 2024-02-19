@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Model.DTOs;
 using Model.Models;
 using System.Collections;
+using System.IO;
+using System.Xml;
 
 namespace Server.Controllers
 {
@@ -18,17 +21,40 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Car>>> GatAllCarAsync()
+        public async Task<ActionResult<List<Car>>> GatAll()
         {
             return Ok(await _dbContext.Cars.ToListAsync());
         }
 
+        [HttpGet("available")]
+        public async Task<ActionResult<List<Car>>> GetAllAvailable()
+        {
+            List<Car> cars = await _dbContext.Cars.ToListAsync();
+            List<Car> availablecars = new();
+            foreach (Car car in cars)
+            {
+                if (!await _dbContext.CarOwnerships.AnyAsync(x => x.CarId == car.Id)) availablecars.Add(car);
+            }
+            return Ok(availablecars);
+        }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Car>> GetCarById(int id)
+        public async Task<ActionResult<Car>> GetById(int id)
         {
             Car? car = await _dbContext.Cars.FirstOrDefaultAsync(c => c.Id == id);
             if (car == null) return NotFound();
             return Ok(car);
+        }
+
+        [HttpGet("details{id}")]
+        public async Task<ActionResult<CarDetails>> GetDetailsById(int id)
+        {
+            Car? car = await _dbContext.Cars.FindAsync(id);
+            if (car == null) return NotFound();
+            CarDetails carDetails = new();
+            carDetails.Car = car;
+            carDetails.Owner = (await _dbContext.Owners.FromSqlRaw($"GetOwnerByCarId {id}").ToListAsync()).FirstOrDefault();
+            return Ok(carDetails);
         }
 
         [HttpPut("{id}")]
@@ -45,23 +71,32 @@ namespace Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteeByCarId(int id)
         {
             Car car = await _dbContext.Cars.FindAsync(id);
             if (car == null)
             {
                 return NotFound();
             }
+            List<CarOwnership> carOwnerships = await _dbContext.CarOwnerships.ToListAsync();
+            carOwnerships = carOwnerships?.Where(x => x.CarId == id).ToList();
+            _dbContext.CarOwnerships.RemoveRange(carOwnerships);
+            await _dbContext.SaveChangesAsync();
             _dbContext.Cars.Remove(car);
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Car car)
+        public async Task<IActionResult> Post(NewCar newCar)
         {
-            _dbContext.Cars.Add(car);
+            _dbContext.Cars.Add(newCar.Car);
             await _dbContext.SaveChangesAsync();
+            if (newCar.OwnerId > 0)
+            {
+                _dbContext.CarOwnerships.Add(new CarOwnership { CarId = newCar.Car.Id, OwnerId = newCar.OwnerId });
+                await _dbContext.SaveChangesAsync();
+            }
             return Ok();
         }
     }

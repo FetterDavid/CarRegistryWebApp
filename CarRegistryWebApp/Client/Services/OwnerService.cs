@@ -1,4 +1,5 @@
-﻿using Model.Models;
+﻿using Model.DTOs;
+using Model.Models;
 using System.IO;
 using System.Net.Http.Json;
 
@@ -20,6 +21,8 @@ namespace Client.Services
         public async Task<IEnumerable<Owner>> GetAllAsync() => await _httpClient.GetFromJsonAsync<IEnumerable<Owner>>("api/owner");
 
         public async Task<Owner> GetByIdAsync(int id) => await _httpClient.GetFromJsonAsync<Owner>($"api/owner/{id}");
+
+        public async Task<OwnerDetails> GetDetailsByIdAsync(int id) => await _httpClient.GetFromJsonAsync<OwnerDetails>($"api/owner/details{id}");
 
         public async Task UpdateAsync(int id, Owner owner) => await _httpClient.PutAsJsonAsync($"api/owner/{id}", owner);
       

@@ -1,4 +1,5 @@
-﻿@page "/car/add"
+﻿@page "/car/add/{ownerId:int}"
+@using Model.DTOs
 @using Model.Models
 @using Client.Services
 @using Client.Shared
@@ -16,12 +17,19 @@ else
 
 @code {
     [Parameter]
-    public int Id { get; set; }
-    private Car _car { get; set; } = new();
+    public int OwnerId { get; set; }
+    private Car _car { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _car = new();
+        _car.ProductionDate = new DateTime(2010, 01, 01);
+    }
 
     private async Task HandleValidSubmitAsync()
     {
-        await CarService.AddAsync(_car);
-        NavigationManager.NavigateTo($"/cars");
+        await CarService.AddAsync(new NewCar { Car = _car, OwnerId = OwnerId });
+        if (OwnerId == 0) NavigationManager.NavigateTo($"/cars");
+        else NavigationManager.NavigateTo($"/owner/{OwnerId}");
     }
 }

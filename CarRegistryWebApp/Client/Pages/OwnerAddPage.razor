@@ -16,7 +16,13 @@ else
 }
 
 @code {
-    private Owner _owner { get; set; } = new();
+    private Owner _owner { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _owner = new();
+        _owner.BirthDate = new DateTime(2000, 01, 01);
+    }
 
     private async Task HandleValidSubmitAsync()
     {

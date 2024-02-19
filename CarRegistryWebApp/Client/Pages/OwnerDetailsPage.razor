@@ -1,48 +1,79 @@
 ﻿@page "/owner/{id:int}"
+@using Model.DTOs
 @using Model.Models
 @using Client.Services
 @inject IOwnerService OwnerService
 @inject NavigationManager NavigationManager
 
 <h3>Owner Details</h3>
-@if (_owner == null)
+@if (_ownerDetails == null)
 {
     <h3>Loading...</h3>
 }
 else
 {
-    <EditForm Model="@_owner">
+    <EditForm Model="@_ownerDetails.Owner">
         <div>
             <label>Last Name</label>
-            <InputText @bind-Value=_owner.LastName class="form-control" disabled />
+            <InputText @bind-Value=_ownerDetails.Owner.LastName class="form-control" disabled />
         </div>
         <div>
             <label>First Name</label>
-            <InputText @bind-Value=_owner.FirstName class="form-control" disabled />
+            <InputText @bind-Value=_ownerDetails.Owner.FirstName class="form-control" disabled />
         </div>
         <div>
             <label>Birth Date</label>
-            <InputDate @bind-Value=_owner.BirthDate class="form-control" disabled />
+            <InputDate @bind-Value=_ownerDetails.Owner.BirthDate class="form-control" disabled />
         </div>
         <div>
             <table>
                 <tr>
-                    <td> <a href="owner/edit/@_owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
-                    <td> <button @onclick="() => HandleDeleteAsync(_owner.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
+                    <td> <a href="owner/edit/@_ownerDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
+                    <td> <button @onclick="() => HandleDeleteAsync(_ownerDetails.Owner.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
                 </tr>
             </table>
         </div>
     </EditForm>
+
+    <h2>The owner's cars:</h2>
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <td>Brand</td>
+                <td>Type</td>
+                <td>RegistrationNumber</td>
+                <td>Production Date</td>
+                <td>
+                    <a href="/cars/select/@_ownerDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Car</a>
+                    <a href="car/add/@_ownerDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Car</a>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Car car in _ownerDetails.Cars)
+            {
+                <tr>
+                    <td>@car.Brand</td>
+                    <td>@car.Type</td>
+                    <td>@car.RegistrationNumber</td>
+                    <td>@car.ProductionDate</td>
+                    <td>
+                        <a href="car/@car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
     [Parameter]
     public int Id { get; set; }
-    private Owner _owner { get; set; }
+    private OwnerDetails _ownerDetails { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        _owner = await OwnerService.GetByIdAsync(Id);
+        _ownerDetails = await OwnerService.GetDetailsByIdAsync(Id);
     }
 
     private async Task HandleDeleteAsync(int id)

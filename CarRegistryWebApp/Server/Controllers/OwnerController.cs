@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Model.DTOs;
 using Model.Models;
 
 namespace Shared.Controllers
@@ -16,18 +17,10 @@ namespace Shared.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Owner>>> Get()
+        public async Task<ActionResult<List<Owner>>> GetAll()
         {
             return Ok(await _dbContext.Owners.ToListAsync());
         }
-
-        //[HttpGet("{cars/ownerId}")]
-        //public async Task<ActionResult<List<Car>>> GetCarsByOwnerId(int ownerId)
-        //{
-        //    ActionResult<List<Car>> result = await _dbContext.Cars.FromSqlRaw($"GetCarsByOwnerId {ownerId}").ToListAsync();
-        //    return Ok(result);
-        //}
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Owner>> GetById(int id)
@@ -35,6 +28,17 @@ namespace Shared.Controllers
             Owner? owner = await _dbContext.Owners.FindAsync(id);
             if (owner == null) return NotFound();
             return Ok(owner);
+        }
+
+        [HttpGet("details{id}")]
+        public async Task<ActionResult<OwnerDetails>> GetDetailsById(int id)
+        {
+            Owner? owner = await _dbContext.Owners.FindAsync(id);
+            if (owner == null) return NotFound();
+            OwnerDetails ownerDetails = new();
+            ownerDetails.Owner = owner;
+            ownerDetails.Cars = await _dbContext.Cars.FromSqlRaw($"GetCarsByOwnerId {id}").ToListAsync();
+            return Ok(ownerDetails);
         }
 
         [HttpPut("{id}")]
@@ -58,6 +62,9 @@ namespace Shared.Controllers
             {
                 return NotFound();
             }
+            List<CarOwnership> carOwnerships = await _dbContext.CarOwnerships.ToListAsync();
+            carOwnerships = carOwnerships?.Where(x => x.OwnerId == id).ToList();
+            _dbContext.CarOwnerships.RemoveRange(carOwnerships);
             _dbContext.Owners.Remove(owner);
             await _dbContext.SaveChangesAsync();
             return NoContent();

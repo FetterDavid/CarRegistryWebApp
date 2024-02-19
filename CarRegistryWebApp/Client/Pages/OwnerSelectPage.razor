@@ -1,0 +1,54 @@
+﻿@page "/owner/select/{carId:int}"
+@using Client.Services
+@using Model.Models
+@inject IOwnerService OwnerService;
+@inject ICarOwnershipService CarOwnershipService;
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Owners</PageTitle>
+<h3>Owners</h3>
+@if (_owners == null)
+{
+    <h2>Loading...</h2>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <td>Last Name</td>
+                <td>First Name</td>
+                <td>Birth Date</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Owner owner in _owners)
+            {
+                <tr>
+                    <td>@owner.LastName</td>
+                    <td>@owner.FirstName</td>
+                    <td>@owner.BirthDate</td>
+                    <td><button @onclick="() => HandleSelectAsync(owner.Id)" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Select</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+    private IEnumerable<Owner>? _owners { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _owners = await OwnerService.GetAllAsync();
+    }
+
+    private async Task HandleSelectAsync(int id)
+    {
+        await CarOwnershipService.AddAsync(new CarOwnership { CarId = CarId, OwnerId = id });
+        NavigationManager.NavigateTo($"/car/{CarId}");
+    }
+}

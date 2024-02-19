@@ -1,57 +1,97 @@
 ﻿@page "/car/{id:int}"
+@using Model.DTOs
 @using Model.Models
 @using Client.Services
 @inject ICarService CarService
+@inject ICarOwnershipService CarOwnershipService
 @inject NavigationManager NavigationManager
 
 <h3>Car Details</h3>
-@if (_car == null)
+@if (_carDetails == null)
 {
     <h3>Loading...</h3>
 }
 else
 {
-    <EditForm Model="@_car">
+    <EditForm Model="@_carDetails.Car">
         <div>
             <label>Brand</label>
-            <InputText @bind-Value=_car.Brand class="form-control" disabled />
+            <InputText @bind-Value=_carDetails.Car.Brand class="form-control" disabled />
         </div>
         <div>
             <label>Type</label>
-            <InputText @bind-Value=_car.Type class="form-control" disabled />
+            <InputText @bind-Value=_carDetails.Car.Type class="form-control" disabled />
         </div>
         <div>
             <label>Registration Number</label>
-            <InputText @bind-Value=_car.RegistrationNumber class="form-control" disabled />
+            <InputText @bind-Value=_carDetails.Car.RegistrationNumber class="form-control" disabled />
         </div>
         <div>
             <label>Production Date</label>
-            <InputDate @bind-Value=_car.ProductionDate class="form-control" disabled />
+            <InputDate @bind-Value=_carDetails.Car.ProductionDate class="form-control" disabled />
         </div>
         <div>
             <table>
                 <tr>
-                    <td> <a href="car/edit/@_car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
-                    <td> <button @onclick="() => HandleDeleteAsync(_car.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
+                    <td> <a href="car/edit/@_carDetails.Car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
+                    <td> <button @onclick="() => HandleDeleteAsync(_carDetails.Car.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
                 </tr>
             </table>
         </div>
     </EditForm>
+    @if (_carDetails.Owner != null)
+    {
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <td>Last Name</td>
+                    <td>First Name</td>
+                    <td>Birth Date</td>
+                    <td><a href="owner/select/@_carDetails.Car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Change the owner</a></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@_carDetails.Owner.LastName</td>
+                    <td>@_carDetails.Owner.FirstName</td>
+                    <td>@_carDetails.Owner.BirthDate</td>
+                    <td>
+                        <a href="owner/@_carDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a>
+                        <button @onclick="() => HandleRevokeOwnerShip()" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">
+                            Revoke the ownership
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2>There is no owner of this car.</h2>
+        <a href="owner/select/@_carDetails.Car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add owner</a>
+    }
 }
+
 
 @code {
     [Parameter]
     public int Id { get; set; }
-    private Car _car { get; set; }
+    private CarDetails _carDetails { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        _car = await CarService.GetByIdAsync(Id);
+        _carDetails = await CarService.GetDetailsByIdAsync(Id);
     }
 
     private async Task HandleDeleteAsync(int id)
     {
         await CarService.DeleteAsync(id);
         NavigationManager.NavigateTo($"/cars");
+    }
+
+    private async Task HandleRevokeOwnerShip()
+    {
+        await CarOwnershipService.DeleteByCarIdAsync(Id);
+        NavigationManager.NavigateTo($"/car/{Id}", true);
     }
 }

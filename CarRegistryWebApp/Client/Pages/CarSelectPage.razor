@@ -1,7 +1,9 @@
-﻿@page "/cars"
+﻿@page "/cars/select/{ownerId:int}"
 @using Model.Models
 @using Client.Services
 @inject ICarService CarService;
+@inject ICarOwnershipService CarOwnershipService;
+@inject NavigationManager NavigationManager
 
 <PageTitle>Cars</PageTitle>
 <h3>Cars</h3>
@@ -18,7 +20,7 @@ else
                 <td>Type</td>
                 <td>RegistrationNumber</td>
                 <td>Production Date</td>
-                <td><a href="car/add/0" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Car</a></td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +31,7 @@ else
                     <td>@car.Type</td>
                     <td>@car.RegistrationNumber</td>
                     <td>@car.ProductionDate</td>
-                    <td><a href="car/@car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
+                    <td> <button @onclick="() => HandleSelectAsync(car.Id)" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Select</button> </td>
                 </tr>
             }
         </tbody>
@@ -38,11 +40,18 @@ else
 }
 
 @code {
+    [Parameter]
+    public int OwnerId { get; set; }
     private IEnumerable<Car>? _cars { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _cars = await CarService.GetAllAsync();
+        _cars = await CarService.GetAllAvailableAsync();
     }
 
+    private async Task HandleSelectAsync(int id)
+    {
+        await CarOwnershipService.AddAsync(new CarOwnership { CarId = id, OwnerId = OwnerId });
+        NavigationManager.NavigateTo($"/owner/{OwnerId}");
+    }
 }
