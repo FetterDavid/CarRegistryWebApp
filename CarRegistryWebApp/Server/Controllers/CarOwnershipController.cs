@@ -6,6 +6,9 @@ using Model.Models;
 
 namespace Server.Controllers
 {
+    /// <summary>
+    /// Controller for managing car ownership operations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CarOwnershipController : ControllerBase
@@ -16,7 +19,9 @@ namespace Server.Controllers
         {
             _dbContext = dbContext;
         }
-
+        /// <summary>
+        /// Creates a new car ownership record.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Post(CarOwnership carOwnership)
         {
@@ -26,7 +31,9 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok();
         }
-
+        /// <summary>
+        /// Deletes a car ownership record by car ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteByCarId(int id)
         {

@@ -6,13 +6,13 @@
 @inject NavigationManager NavigationManager
 
 <PageTitle>Cars</PageTitle>
-<h3>Cars</h3>
 @if (_cars == null)
 {
     <h2>Loading...</h2>
 }
 else
 {
+    <h3>Available Cars</h3>
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
@@ -30,7 +30,7 @@ else
                     <td>@car.Brand</td>
                     <td>@car.Type</td>
                     <td>@car.RegistrationNumber</td>
-                    <td>@car.ProductionDate</td>
+                    <td>@car.ProductionDate.ToString("yyyy-MM-dd")</td>
                     <td> <button @onclick="() => HandleSelectAsync(car.Id)" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Select</button> </td>
                 </tr>
             }

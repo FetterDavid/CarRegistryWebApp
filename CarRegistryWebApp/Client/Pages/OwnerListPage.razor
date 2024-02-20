@@ -4,13 +4,13 @@
 @inject IOwnerService OwnerService;
 
 <PageTitle>Owners</PageTitle>
-<h3>Owners</h3>
 @if (_owners == null)
 {
     <h2>Loading...</h2>
 }
 else
 {
+    <h3>Owners</h3>
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
@@ -26,7 +26,7 @@ else
                 <tr>
                     <td>@owner.LastName</td>
                     <td>@owner.FirstName</td>
-                    <td>@owner.BirthDate</td>
+                    <td>@owner.BirthDate.ToString("yyyy-MM-dd")</td>
                     <td><a href="owner/@owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
                 </tr>
             }

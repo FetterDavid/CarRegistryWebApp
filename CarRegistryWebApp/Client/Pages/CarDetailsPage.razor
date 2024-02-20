@@ -6,13 +6,13 @@
 @inject ICarOwnershipService CarOwnershipService
 @inject NavigationManager NavigationManager
 
-<h3>Car Details</h3>
 @if (_carDetails == null)
 {
     <h3>Loading...</h3>
 }
 else
 {
+    <h3>Car Details</h3>
     <EditForm Model="@_carDetails.Car">
         <div>
             <label>Brand</label>

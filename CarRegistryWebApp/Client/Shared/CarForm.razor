@@ -6,21 +6,26 @@
 else
 {
     <EditForm Model="@Car" OnValidSubmit="@HandleValidSubmitAsync">
+        <DataAnnotationsValidator />
         <div>
             <label>Brand</label>
             <InputText @bind-Value=Car.Brand class="form-control" />
+            <ValidationMessage For="() => Car.Brand" />
         </div>
         <div>
             <label>Type</label>
             <InputText @bind-Value=Car.Type class="form-control" />
+            <ValidationMessage For="() => Car.Type" />
         </div>
         <div>
             <label>Registration Number</label>
             <InputText @bind-Value=Car.RegistrationNumber class="form-control" />
+            <ValidationMessage For="() => Car.RegistrationNumber" />
         </div>
         <div>
             <label>Production Date</label>
             <InputDate @bind-Value=Car.ProductionDate class="form-control" />
+            <ValidationMessage For="() => Car.ProductionDate" />
         </div>
         <div>
             <button style="margin-top:10px" type="submit" class="btn btn-primary form-control mb-3">@ButtonTitle</button>

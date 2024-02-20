@@ -5,6 +5,9 @@ using Model.Models;
 
 namespace Shared.Controllers
 {
+    /// <summary>
+    /// Controller for managing owner-related operations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class OwnerController : ControllerBase
@@ -15,13 +18,17 @@ namespace Shared.Controllers
         {
             _dbContext = dbContext;
         }
-
+        /// <summary>
+        /// Retrieves all owners.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<Owner>>> GetAll()
         {
             return Ok(await _dbContext.Owners.ToListAsync());
         }
-
+        /// <summary>
+        /// Retrieves an owner by their ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Owner>> GetById(int id)
         {
@@ -29,7 +36,9 @@ namespace Shared.Controllers
             if (owner == null) return NotFound();
             return Ok(owner);
         }
-
+        /// <summary>
+        /// Retrieves details of an owner by their ID.
+        /// </summary>
         [HttpGet("details{id}")]
         public async Task<ActionResult<OwnerDetails>> GetDetailsById(int id)
         {
@@ -40,7 +49,9 @@ namespace Shared.Controllers
             ownerDetails.Cars = await _dbContext.Cars.FromSqlRaw($"GetCarsByOwnerId {id}").ToListAsync();
             return Ok(ownerDetails);
         }
-
+        /// <summary>
+        /// Updates an owner by their ID.
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Owner ownerToUpdate)
         {
@@ -53,7 +64,9 @@ namespace Shared.Controllers
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
-
+        /// <summary>
+        /// Deletes an owner by their ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -62,14 +75,16 @@ namespace Shared.Controllers
             {
                 return NotFound();
             }
-            List<CarOwnership> carOwnerships = await _dbContext.CarOwnerships.ToListAsync();
+            List<CarOwnership>? carOwnerships = await _dbContext.CarOwnerships.ToListAsync();
             carOwnerships = carOwnerships?.Where(x => x.OwnerId == id).ToList();
             _dbContext.CarOwnerships.RemoveRange(carOwnerships);
             _dbContext.Owners.Remove(owner);
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
-
+        /// <summary>
+        /// Creates a new owner.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Post(Owner owner)
         {

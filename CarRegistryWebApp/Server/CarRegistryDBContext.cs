@@ -3,6 +3,9 @@ using Model.Models;
 
 namespace Server.Models
 {
+    /// <summary>
+    /// Represents the database context for the Car Registry application.
+    /// </summary>
     public partial class CarRegistryDBContext : DbContext
     {
         public CarRegistryDBContext()
@@ -13,9 +16,17 @@ namespace Server.Models
             : base(options)
         {
         }
-
+        /// <summary>
+        /// Gets or sets the DbSet of cars in the database.
+        /// </summary>
         public virtual DbSet<Car> Cars { get; set; } = null!;
+        /// <summary>
+        /// Gets or sets the DbSet of car ownership records in the database.
+        /// </summary>
         public virtual DbSet<CarOwnership> CarOwnerships { get; set; } = null!;
+        /// <summary>
+        /// Gets or sets the DbSet of owners in the database.
+        /// </summary>
         public virtual DbSet<Owner> Owners { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -52,7 +63,7 @@ namespace Server.Models
                 entity.ToTable("CarOwnership");
 
                 entity.HasIndex(e => e.CarId, "UQ__CarOwner__68A0342F508DE1E4")
-                    .IsUnique();             
+                    .IsUnique();
             });
 
             modelBuilder.Entity<Owner>(entity =>

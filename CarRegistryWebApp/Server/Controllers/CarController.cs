@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model.DTOs;
 using Model.Models;
-using System.Collections;
-using System.IO;
-using System.Xml;
 
 namespace Server.Controllers
 {
+    /// <summary>
+    /// Controller for managing car-related operations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CarController : ControllerBase
@@ -19,13 +18,17 @@ namespace Server.Controllers
         {
             _dbContext = dbContext;
         }
-
+        /// <summary>
+        /// Retrieves all cars.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<Car>>> GatAll()
         {
             return Ok(await _dbContext.Cars.ToListAsync());
         }
-
+        /// <summary>
+        /// Retrieves all available cars.
+        /// </summary>
         [HttpGet("available")]
         public async Task<ActionResult<List<Car>>> GetAllAvailable()
         {
@@ -37,7 +40,9 @@ namespace Server.Controllers
             }
             return Ok(availablecars);
         }
-
+        /// <summary>
+        /// Retrieves a car by its ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Car>> GetById(int id)
         {
@@ -45,7 +50,9 @@ namespace Server.Controllers
             if (car == null) return NotFound();
             return Ok(car);
         }
-
+        /// <summary>
+        /// Retrieves details of a car by its ID.
+        /// </summary>
         [HttpGet("details{id}")]
         public async Task<ActionResult<CarDetails>> GetDetailsById(int id)
         {
@@ -56,7 +63,9 @@ namespace Server.Controllers
             carDetails.Owner = (await _dbContext.Owners.FromSqlRaw($"GetOwnerByCarId {id}").ToListAsync()).FirstOrDefault();
             return Ok(carDetails);
         }
-
+        /// <summary>
+        /// Updates a car.
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Car carToUpdate)
         {
@@ -69,7 +78,9 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
-
+        /// <summary>
+        /// Deletes a car by its ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteeByCarId(int id)
         {
@@ -78,7 +89,7 @@ namespace Server.Controllers
             {
                 return NotFound();
             }
-            List<CarOwnership> carOwnerships = await _dbContext.CarOwnerships.ToListAsync();
+            List<CarOwnership>? carOwnerships = await _dbContext.CarOwnerships.ToListAsync();
             carOwnerships = carOwnerships?.Where(x => x.CarId == id).ToList();
             _dbContext.CarOwnerships.RemoveRange(carOwnerships);
             await _dbContext.SaveChangesAsync();
@@ -86,7 +97,9 @@ namespace Server.Controllers
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
-
+        /// <summary>
+        /// Creates a new car.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Post(NewCar newCar)
         {

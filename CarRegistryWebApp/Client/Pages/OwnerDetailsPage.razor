@@ -5,13 +5,13 @@
 @inject IOwnerService OwnerService
 @inject NavigationManager NavigationManager
 
-<h3>Owner Details</h3>
 @if (_ownerDetails == null)
 {
     <h3>Loading...</h3>
 }
 else
 {
+    <h3>Owner Details</h3>
     <EditForm Model="@_ownerDetails.Owner">
         <div>
             <label>Last Name</label>
