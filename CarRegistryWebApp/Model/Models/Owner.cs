@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Model.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Models
 {
@@ -15,14 +17,17 @@ namespace Model.Models
         /// <summary>
         /// Gets or sets the last name of the owner.
         /// </summary>
+        [Required, MaxLength(50), NameValidation]
         public string LastName { get; set; } = null!;
         /// <summary>
         /// Gets or sets the first name of the owner.
         /// </summary>
+        [Required, MaxLength(50), NameValidation]
         public string FirstName { get; set; } = null!;
         /// <summary>
         /// Gets or sets the birth date of the owner.
         /// </summary>
+        [Required, LaterThan("1900-01-01")]
         public DateTime BirthDate { get; set; }
     }
 }
