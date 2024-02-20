@@ -13,7 +13,14 @@
 }
 else
 {
+    <div class="form-inline">
+        <input type="text" class="mb-2 mr-sm-2" @bind="searchText" placeholder="Search" style="display: inline;" />
+        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Filter</button>
+        <button type="button" class="btn btn-danger mb-2" @onclick="Clear" style="display: inline;">Clear</button>
+    </div>
+
     <Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
+
     <h3>Available Cars</h3>
     <table class="table table-hover table-bordered">
         <thead>
@@ -47,6 +54,7 @@ else
     private IEnumerable<Car>? _cars { get; set; }
     private int totalPageQuantity;
     private int currentPage = 1;
+    private string searchText = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,7 +69,7 @@ else
 
     private async Task LoadCars(int page = 1, int quantityPerPage = 10)
     {
-        PaginationResult<Car> res = await CarService.GetAllAvailableAsync(page, quantityPerPage);
+        PaginationResult<Car> res = await CarService.GetAllAvailableAsync(searchText, page, quantityPerPage);
         _cars = res.Data;
         totalPageQuantity = res.PageCount;
     }
@@ -70,5 +78,18 @@ else
     {
         await CarOwnershipService.AddAsync(new CarOwnership { CarId = id, OwnerId = OwnerId });
         NavigationManager.NavigateTo($"/owner/{OwnerId}");
+    }
+
+    private async Task Search()
+    {
+        currentPage = 1;
+        await LoadCars();
+    }
+
+    private async Task Clear()
+    {
+        searchText = string.Empty;
+        currentPage = 1;
+        await LoadCars();
     }
 }

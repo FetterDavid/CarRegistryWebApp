@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Server.Utilities
+﻿namespace Server.Utilities
 {
     public static class Static
     {

@@ -24,9 +24,9 @@ namespace Client.Services
         /// <inheritdoc/>
         public async Task DeleteAsync(int id) => await _httpClient.DeleteAsync($"api/owner/{id}");
         /// <inheritdoc/>
-        public async Task<PaginationResult<Owner>> GetAllAsync(int page = 1, int quantityPerPage = 1)
+        public async Task<PaginationResult<Owner>> GetAllAsync(string searchText, int page = 1, int quantityPerPage = 1)
         {
-            return await _httpClient.GetFromJsonAsync<PaginationResult<Owner>>($"api/owner?page={page}&quantityPerPage={quantityPerPage}");
+            return await _httpClient.GetFromJsonAsync<PaginationResult<Owner>>($"api/owner?page={page}&quantityPerPage={quantityPerPage}&searchText={searchText}");
         }
         /// <inheritdoc/>
         public async Task<Owner> GetByIdAsync(int id) => await _httpClient.GetFromJsonAsync<Owner>($"api/owner/{id}");

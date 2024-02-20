@@ -5,6 +5,7 @@ using Model.DTOs;
 using Model.Models;
 using Server.Utilities;
 using System.Linq;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Server.Controllers
 {
@@ -25,9 +26,17 @@ namespace Server.Controllers
         /// Retrieves all cars.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<PaginationResult<Car>>> GatAll([FromQuery] Pagination pagination)
+        public async Task<ActionResult<PaginationResult<Car>>> GatAll([FromQuery] Pagination pagination, [FromQuery] string? searchText)
         {
             IQueryable<Car> cars = _dbContext.Cars.AsQueryable();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                string[] words = searchText.Split(' ');
+                foreach (string word in words)
+                {
+                    cars = cars.Where(x => x.Brand.Contains(word) || x.Type.Contains(word) || x.RegistrationNumber.Contains(word));
+                }
+            }
             int pageCount = Static.GetListPageCount<Car>(cars, pagination.QuantityPerPage);
             return Ok(new PaginationResult<Car> { Data = await cars.Paginate(pagination).ToListAsync(), PageCount = pageCount });
         }
@@ -35,9 +44,17 @@ namespace Server.Controllers
         /// Retrieves all available cars.
         /// </summary>
         [HttpGet("available")]
-        public async Task<ActionResult<PaginationResult<Car>>> GetAllAvailable([FromQuery] Pagination pagination)
+        public async Task<ActionResult<PaginationResult<Car>>> GetAllAvailable([FromQuery] Pagination pagination, [FromQuery] string? searchText)
         {
             List<Car> cars = await _dbContext.Cars.FromSqlRaw("GetAvailableCars").ToListAsync();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                string[] words = searchText.Split(' ');
+                foreach (string word in words)
+                {
+                    cars = cars.Where(x => x.Brand.Contains(word) || x.Type.Contains(word) || x.RegistrationNumber.Contains(word)).ToList();
+                }
+            }
             int pageCount = Static.GetListPageCount<Car>(cars, pagination.QuantityPerPage);
             return Ok(new PaginationResult<Car>
             { Data = cars.Skip((pagination.Page - 1) * pagination.QuantityPerPage).Take(pagination.QuantityPerPage).ToList(), PageCount = pageCount });

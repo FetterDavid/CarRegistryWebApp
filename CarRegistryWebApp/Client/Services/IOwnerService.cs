@@ -24,7 +24,7 @@ namespace Client.Services
         /// Retrieves all owners asynchronously.
         /// </summary>
         /// <returns>A collection of owners.</returns>
-        Task<PaginationResult<Owner>> GetAllAsync(int page = 1, int quantityPerPage = 1);
+        Task<PaginationResult<Owner>> GetAllAsync(string searchText, int page = 1, int quantityPerPage = 1);
         /// <summary>
         /// Retrieves an owner asynchronously by their ID.
         /// </summary>

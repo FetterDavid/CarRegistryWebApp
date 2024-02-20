@@ -23,9 +23,17 @@ namespace Shared.Controllers
         /// Retrieves all owners.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<PaginationResult<Owner>>> GatAll([FromQuery] Pagination pagination)
+        public async Task<ActionResult<PaginationResult<Owner>>> GatAll([FromQuery] Pagination pagination, [FromQuery] string? searchText)
         {
             IQueryable<Owner> owners = _dbContext.Owners.AsQueryable();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                string[] words = searchText.Split(' ');
+                foreach (string word in words)
+                {
+                    owners = owners.Where(x => x.FirstName.Contains(word) || x.LastName.Contains(word));
+                }
+            }
             int pageCount = Static.GetListPageCount<Owner>(owners, pagination.QuantityPerPage);
             return Ok(new PaginationResult<Owner> { Data = await owners.Paginate(pagination).ToListAsync(), PageCount = pageCount });
         }

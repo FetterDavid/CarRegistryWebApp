@@ -26,14 +26,14 @@ namespace Client.Services
         /// <inheritdoc/>
         public async Task DeleteAsync(int id) => await _httpClient.DeleteAsync($"api/car/{id}");
         /// <inheritdoc/>
-        public async Task<PaginationResult<Car>> GetAllAsync(int page = 1, int quantityPerPage = 1)
+        public async Task<PaginationResult<Car>> GetAllAsync(string searchText, int page = 1, int quantityPerPage = 1)
         {
-            return await _httpClient.GetFromJsonAsync<PaginationResult<Car>>($"api/car?page={page}&quantityPerPage={quantityPerPage}");
+            return await _httpClient.GetFromJsonAsync<PaginationResult<Car>>($"api/car?page={page}&quantityPerPage={quantityPerPage}&searchText={searchText}");
         }
         /// <inheritdoc/>
-        public async Task<PaginationResult<Car>> GetAllAvailableAsync(int page = 1, int quantityPerPage = 10)
+        public async Task<PaginationResult<Car>> GetAllAvailableAsync(string searchText, int page = 1, int quantityPerPage = 10)
         {
-            return await _httpClient.GetFromJsonAsync<PaginationResult<Car>>($"api/car/available?page={page}&quantityPerPage={quantityPerPage}");
+            return await _httpClient.GetFromJsonAsync<PaginationResult<Car>>($"api/car/available?page={page}&quantityPerPage={quantityPerPage}&searchText={searchText}");
         }
         /// <inheritdoc/>
         public async Task<Car> GetByIdAsync(int id) => await _httpClient.GetFromJsonAsync<Car>($"api/car/{id}");
