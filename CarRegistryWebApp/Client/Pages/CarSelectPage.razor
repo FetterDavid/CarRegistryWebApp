@@ -15,20 +15,20 @@ else
 {
     <div class="form-inline">
         <input type="text" class="mb-2 mr-sm-2" @bind="searchText" placeholder="Search" style="display: inline;" />
-        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Filter</button>
+        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Search</button>
         <button type="button" class="btn btn-danger mb-2" @onclick="Clear" style="display: inline;">Clear</button>
     </div>
 
     <Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
 
     <h3>Available Cars</h3>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table">
         <thead>
             <tr>
-                <td>Brand</td>
-                <td>Type</td>
-                <td>RegistrationNumber</td>
-                <td>Production Date</td>
+                <td style="font-weight: bold; vertical-align: middle;">Brand</td>
+                <td style="font-weight: bold; vertical-align: middle;">Type</td>
+                <td style="font-weight: bold; vertical-align: middle;">RegistrationNumber</td>
+                <td style="font-weight: bold; vertical-align: middle;">Production Date</td>
                 <td></td>
             </tr>
         </thead>
@@ -36,11 +36,11 @@ else
             @foreach (Car car in _cars)
             {
                 <tr>
-                    <td>@car.Brand</td>
-                    <td>@car.Type</td>
-                    <td>@car.RegistrationNumber</td>
-                    <td>@car.ProductionDate.ToString("yyyy-MM-dd")</td>
-                    <td> <button @onclick="() => HandleSelectAsync(car.Id)" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Select</button> </td>
+                    <td style="vertical-align: middle;">@car.Brand</td>
+                    <td style="vertical-align: middle;">@car.Type</td>
+                    <td style="vertical-align: middle;">@car.RegistrationNumber</td>
+                    <td style="vertical-align: middle;">@car.ProductionDate.ToString("yyyy-MM-dd")</td>
+                    <td> <button @onclick="() => HandleSelectAsync(car.Id)" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Select</button> </td>
                 </tr>
             }
         </tbody>

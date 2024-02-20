@@ -15,19 +15,19 @@ else
 {
     <div class="form-inline">
         <input type="text" class="mb-2 mr-sm-2" @bind="searchText" placeholder="Search" style="display: inline;" />
-        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Filter</button>
+        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Search</button>
         <button type="button" class="btn btn-danger mb-2" @onclick="Clear" style="display: inline;">Clear</button>
     </div>
 
     <Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
 
     <h3>Owners</h3>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table">
         <thead>
             <tr>
-                <td>Last Name</td>
-                <td>First Name</td>
-                <td>Birth Date</td>
+                <td style="font-weight: bold; vertical-align: middle;"> First Name</td>
+                <td style="font-weight: bold; vertical-align: middle;">Last Name</td>
+                <td style="font-weight: bold; vertical-align: middle;">Birth Date</td>
                 <td></td>
             </tr>
         </thead>
@@ -35,10 +35,10 @@ else
             @foreach (Owner owner in _owners)
             {
                 <tr>
-                    <td>@owner.LastName</td>
-                    <td>@owner.FirstName</td>
-                    <td>@owner.BirthDate.ToString("yyyy-MM-dd")</td>
-                    <td><button @onclick="() => HandleSelectAsync(owner.Id)" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Select</button></td>
+                    <td style="vertical-align: middle;">@owner.FirstName</td>
+                    <td style="vertical-align: middle;">@owner.LastName</td>
+                    <td style="vertical-align: middle;">@owner.BirthDate.ToString("yyyy-MM-dd")</td>
+                    <td><button @onclick="() => HandleSelectAsync(owner.Id)" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Select</button></td>
                 </tr>
             }
         </tbody>

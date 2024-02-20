@@ -14,12 +14,12 @@ else
     <h3>Owner Details</h3>
     <EditForm Model="@_ownerDetails.Owner">
         <div>
-            <label>Last Name</label>
-            <InputText @bind-Value=_ownerDetails.Owner.LastName class="form-control" disabled />
-        </div>
-        <div>
             <label>First Name</label>
             <InputText @bind-Value=_ownerDetails.Owner.FirstName class="form-control" disabled />
+        </div>
+        <div>
+            <label>Last Name</label>
+            <InputText @bind-Value=_ownerDetails.Owner.LastName class="form-control" disabled />
         </div>
         <div>
             <label>Birth Date</label>
@@ -37,16 +37,16 @@ else
 
     <h2>The owner's cars:</h2>
 
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table">
         <thead>
             <tr>
-                <td>Brand</td>
-                <td>Type</td>
-                <td>RegistrationNumber</td>
-                <td>Production Date</td>
+                <td style="font-weight: bold; vertical-align: middle;">Brand</td>
+                <td style="font-weight: bold; vertical-align: middle;">Type</td>
+                <td style="font-weight: bold; vertical-align: middle;">RegistrationNumber</td>
+                <td style="font-weight: bold; vertical-align: middle;">Production Date</td>
                 <td>
-                    <a href="/cars/select/@_ownerDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Car</a>
-                    <a href="car/add/@_ownerDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Car</a>
+                    <a href="/cars/select/@_ownerDetails.Owner.Id" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Add Car</a>
+                    <a href="car/add/@_ownerDetails.Owner.Id" class="btn btn-success btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Add New Car</a>
                 </td>
             </tr>
         </thead>
@@ -54,12 +54,13 @@ else
             @foreach (Car car in _ownerDetails.Cars)
             {
                 <tr>
-                    <td>@car.Brand</td>
-                    <td>@car.Type</td>
-                    <td>@car.RegistrationNumber</td>
-                    <td>@car.ProductionDate</td>
+                    <td style="vertical-align: middle;">@car.Brand</td>
+                    <td style="vertical-align: middle;">@car.Type</td>
+                    <td style="vertical-align: middle;">@car.RegistrationNumber</td>
+                    <td style="vertical-align: middle;">@car.ProductionDate</td>
                     <td>
-                        <a href="car/@car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
+                        <a href="car/@car.Id" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Details</a>
+                    </td>
                 </tr>
             }
         </tbody>

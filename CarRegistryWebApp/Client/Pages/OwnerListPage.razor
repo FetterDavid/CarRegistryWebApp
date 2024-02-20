@@ -1,4 +1,5 @@
-﻿@page "/owners"
+﻿@page "/"
+@page "/owners"
 @using Client.Services
 @using Model.DTOs
 @using Model.Models
@@ -13,30 +14,30 @@ else
 {
     <div class="form-inline">
         <input type="text" class="mb-2 mr-sm-2" @bind="searchText" placeholder="Search" style="display: inline;" />
-        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Filter</button>
+        <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Search" style="display: inline;">Search</button>
         <button type="button" class="btn btn-danger mb-2" @onclick="Clear" style="display: inline;">Clear</button>
     </div>
 
     <Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
 
     <h3>Owners</h3>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table">
         <thead>
             <tr>
-                <td>Last Name</td>
-                <td>First Name</td>
-                <td>Birth Date</td>
-                <td><a href="owner/add" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Owner</a></td>
+                <td style="font-weight: bold; vertical-align: middle;">First Name</td>
+                <td style="font-weight: bold; vertical-align: middle;">Last Name</td>
+                <td style="font-weight: bold; vertical-align: middle;">Birth Date</td>
+                <td><a href="owner/add" class="btn btn-success btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Add New Owner</a></td>
             </tr>
         </thead>
         <tbody>
             @foreach (Owner owner in _owners)
             {
                 <tr>
-                    <td>@owner.LastName</td>
-                    <td>@owner.FirstName</td>
-                    <td>@owner.BirthDate.ToString("yyyy-MM-dd")</td>
-                    <td><a href="owner/@owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
+                    <td style="vertical-align: middle;">@owner.FirstName</td>
+                    <td style="vertical-align: middle;">@owner.LastName</td>
+                    <td style="vertical-align: middle;">@owner.BirthDate.ToString("yyyy-MM-dd")</td>
+                    <td style="vertical-align: middle;"><a href="owner/@owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a></td>
                 </tr>
             }
         </tbody>

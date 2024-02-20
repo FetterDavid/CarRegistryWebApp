@@ -33,31 +33,33 @@ else
         <div>
             <table>
                 <tr>
-                    <td> <a href="car/edit/@_carDetails.Car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Edit</a></td>
-                    <td> <button @onclick="() => HandleDeleteAsync(_carDetails.Car.Id)" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Delete</button></td>
+                    <td> <a href="car/edit/@_carDetails.Car.Id" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Edit</a></td>
+                    <td> <button @onclick="() => HandleDeleteAsync(_carDetails.Car.Id)" class="btn btn-danger btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Delete</button></td>
                 </tr>
             </table>
         </div>
     </EditForm>
     @if (_carDetails.Owner != null)
     {
-        <table class="table table-hover table-bordered">
+        <h2>The owner:</h2>
+
+        <table class="table table-hover table">
             <thead>
                 <tr>
-                    <td>Last Name</td>
-                    <td>First Name</td>
-                    <td>Birth Date</td>
-                    <td><a href="owner/select/@_carDetails.Car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Change the owner</a></td>
+                    <td style ="font-weight: bold; vertical-align: middle;">Last Name</td>
+                    <td style="font-weight: bold; vertical-align: middle;">First Name</td>
+                    <td style="font-weight: bold; vertical-align: middle;">Birth Date</td>
+                    <td><a href="owner/select/@_carDetails.Car.Id" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Change the owner</a></td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>@_carDetails.Owner.LastName</td>
-                    <td>@_carDetails.Owner.FirstName</td>
-                    <td>@_carDetails.Owner.BirthDate</td>
+                    <td style="vertical-align: middle;">@_carDetails.Owner.LastName</td>
+                    <td style="vertical-align: middle;">@_carDetails.Owner.FirstName</td>
+                    <td style="vertical-align: middle;">@_carDetails.Owner.BirthDate</td>
                     <td>
-                        <a href="owner/@_carDetails.Owner.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Details</a>
-                        <button @onclick="() => HandleRevokeOwnerShip()" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">
+                        <a href="owner/@_carDetails.Owner.Id" class="btn btn-primary btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">Details</a>
+                        <button @onclick="() => HandleRevokeOwnerShip()" class="btn btn-danger btn-lg active mb-2 mr-sm-2" role="button" aria-pressed="true">
                             Revoke the ownership
                         </button>
                     </td>
@@ -68,7 +70,7 @@ else
     else
     {
         <h2>There is no owner of this car.</h2>
-        <a href="owner/select/@_carDetails.Car.Id" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add owner</a>
+        <a href="owner/select/@_carDetails.Car.Id" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Add owner</a>
     }
 }
 

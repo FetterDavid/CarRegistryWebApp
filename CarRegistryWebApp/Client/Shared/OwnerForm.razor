@@ -8,14 +8,14 @@ else
     <EditForm Model="@Owner" OnValidSubmit="@HandleValidSubmitAsync">
         <DataAnnotationsValidator />
         <div>
-            <label>Last Name</label>
-            <InputText @bind-Value=Owner.LastName class="form-control" />
-            <ValidationMessage For="() => Owner.LastName" />
-        </div>
-        <div>
             <label>First Name</label>
             <InputText @bind-Value=Owner.FirstName class="form-control" />
             <ValidationMessage For="() => Owner.FirstName" />
+        </div>
+        <div>
+            <label>Last Name</label>
+            <InputText @bind-Value=Owner.LastName class="form-control" />
+            <ValidationMessage For="() => Owner.LastName" />
         </div>
         <div>
             <label>Birth Date</label>
