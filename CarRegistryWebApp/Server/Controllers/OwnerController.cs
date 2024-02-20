@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Model.DTOs;
 using Model.Models;
+using Server.Utilities;
 
 namespace Shared.Controllers
 {
@@ -22,9 +23,11 @@ namespace Shared.Controllers
         /// Retrieves all owners.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<List<Owner>>> GetAll()
+        public async Task<ActionResult<PaginationResult<Owner>>> GatAll([FromQuery] Pagination pagination)
         {
-            return Ok(await _dbContext.Owners.ToListAsync());
+            IQueryable<Owner> owners = _dbContext.Owners.AsQueryable();
+            int pageCount = Static.GetListPageCount<Owner>(owners, pagination.QuantityPerPage);
+            return Ok(new PaginationResult<Owner> { Data = await owners.Paginate(pagination).ToListAsync(), PageCount = pageCount });
         }
         /// <summary>
         /// Retrieves an owner by their ID.

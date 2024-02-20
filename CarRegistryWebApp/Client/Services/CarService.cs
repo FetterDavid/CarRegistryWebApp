@@ -1,9 +1,12 @@
 ﻿using Model.DTOs;
 using Model.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace Client.Services
 {
@@ -23,9 +26,15 @@ namespace Client.Services
         /// <inheritdoc/>
         public async Task DeleteAsync(int id) => await _httpClient.DeleteAsync($"api/car/{id}");
         /// <inheritdoc/>
-        public async Task<IEnumerable<Car>> GetAllAsync() => await _httpClient.GetFromJsonAsync<IEnumerable<Car>>("api/car");
+        public async Task<PaginationResult<Car>> GetAllAsync(int page = 1, int quantityPerPage = 1)
+        {
+            return await _httpClient.GetFromJsonAsync<PaginationResult<Car>>($"api/car?page={page}&quantityPerPage={quantityPerPage}");
+        }
         /// <inheritdoc/>
-        public async Task<IEnumerable<Car>> GetAllAvailableAsync() => await _httpClient.GetFromJsonAsync<IEnumerable<Car>>("api/car/available");
+        public async Task<PaginationResult<Car>> GetAllAvailableAsync(int page = 1, int quantityPerPage = 10)
+        {
+            return await _httpClient.GetFromJsonAsync<PaginationResult<Car>>($"api/car/available?page={page}&quantityPerPage={quantityPerPage}");
+        }
         /// <inheritdoc/>
         public async Task<Car> GetByIdAsync(int id) => await _httpClient.GetFromJsonAsync<Car>($"api/car/{id}");
         /// <inheritdoc/>

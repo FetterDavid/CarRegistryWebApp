@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model.DTOs;
 using Model.Models;
+using Server.Utilities;
+using System.Linq;
 
 namespace Server.Controllers
 {
@@ -22,23 +25,22 @@ namespace Server.Controllers
         /// Retrieves all cars.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<List<Car>>> GatAll()
+        public async Task<ActionResult<PaginationResult<Car>>> GatAll([FromQuery] Pagination pagination)
         {
-            return Ok(await _dbContext.Cars.ToListAsync());
+            IQueryable<Car> cars = _dbContext.Cars.AsQueryable();
+            int pageCount = Static.GetListPageCount<Car>(cars, pagination.QuantityPerPage);
+            return Ok(new PaginationResult<Car> { Data = await cars.Paginate(pagination).ToListAsync(), PageCount = pageCount });
         }
         /// <summary>
         /// Retrieves all available cars.
         /// </summary>
         [HttpGet("available")]
-        public async Task<ActionResult<List<Car>>> GetAllAvailable()
+        public async Task<ActionResult<PaginationResult<Car>>> GetAllAvailable([FromQuery] Pagination pagination)
         {
-            List<Car> cars = await _dbContext.Cars.ToListAsync();
-            List<Car> availablecars = new();
-            foreach (Car car in cars)
-            {
-                if (!await _dbContext.CarOwnerships.AnyAsync(x => x.CarId == car.Id)) availablecars.Add(car);
-            }
-            return Ok(availablecars);
+            List<Car> cars = await _dbContext.Cars.FromSqlRaw("GetAvailableCars").ToListAsync();
+            int pageCount = Static.GetListPageCount<Car>(cars, pagination.QuantityPerPage);
+            return Ok(new PaginationResult<Car>
+            { Data = cars.Skip((pagination.Page - 1) * pagination.QuantityPerPage).Take(pagination.QuantityPerPage).ToList(), PageCount = pageCount });
         }
         /// <summary>
         /// Retrieves a car by its ID.

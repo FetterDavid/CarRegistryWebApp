@@ -1,5 +1,6 @@
 ﻿@page "/cars"
 @using Model.Models
+@using Model.DTOs
 @using Client.Services
 @inject ICarService CarService;
 
@@ -10,6 +11,8 @@
 }
 else
 {
+    <Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
+
     <h3>Cars</h3>
     <table class="table table-hover table-bordered">
         <thead>
@@ -39,10 +42,24 @@ else
 
 @code {
     private IEnumerable<Car>? _cars { get; set; }
+    private int totalPageQuantity;
+    private int currentPage = 1;
 
     protected override async Task OnInitializedAsync()
     {
-        _cars = await CarService.GetAllAsync();
+        await LoadCars();
     }
 
+    private async Task SelectedPage(int page)
+    {
+        currentPage = page;
+        await LoadCars(page);
+    }
+
+    private async Task LoadCars(int page = 1, int quantityPerPage = 10)
+    {
+        PaginationResult<Car> res = await CarService.GetAllAsync(page, quantityPerPage);
+        _cars = res.Data;
+        totalPageQuantity = res.PageCount;
+    }
 }

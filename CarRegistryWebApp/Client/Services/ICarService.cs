@@ -24,12 +24,12 @@ namespace Client.Services
         /// Retrieves all cars asynchronously.
         /// </summary>
         /// <returns>A collection of cars.</returns>
-        Task<IEnumerable<Car>> GetAllAsync();
+        Task<PaginationResult<Car>> GetAllAsync(int page = 1, int quantityPerPage = 10);
         /// <summary>
         /// Retrieves all available cars asynchronously.
         /// </summary>
         /// <returns>A collection of available cars.</returns>
-        Task<IEnumerable<Car>> GetAllAvailableAsync();
+        Task<PaginationResult<Car>> GetAllAvailableAsync(int page = 1, int quantityPerPage = 10);
         /// <summary>
         /// Retrieves a car asynchronously by its ID.
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿@page "/owner/select/{carId:int}"
 @using Client.Services
+@using Model.DTOs
 @using Model.Models
 @inject IOwnerService OwnerService;
 @inject ICarOwnershipService CarOwnershipService;
@@ -12,6 +13,7 @@
 }
 else
 {
+    <Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
     <h3>Owners</h3>
     <table class="table table-hover table-bordered">
         <thead>
@@ -41,9 +43,25 @@ else
     public int CarId { get; set; }
     private IEnumerable<Owner>? _owners { get; set; }
 
+    private int totalPageQuantity;
+    private int currentPage = 1;
+
     protected override async Task OnInitializedAsync()
     {
-        _owners = await OwnerService.GetAllAsync();
+        await LoadOwners();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        currentPage = page;
+        await LoadOwners(page);
+    }
+
+    private async Task LoadOwners(int page = 1, int quantityPerPage = 10)
+    {
+        PaginationResult<Owner> res = await OwnerService.GetAllAsync(page, quantityPerPage);
+        _owners = res.Data;
+        totalPageQuantity = res.PageCount;
     }
 
     private async Task HandleSelectAsync(int id)
